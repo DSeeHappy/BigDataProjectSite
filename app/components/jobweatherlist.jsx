@@ -3,15 +3,53 @@ import classNames from "@/app/components/classnames";
 import {useState} from "react";
 import JobForm from "@/app/components/jobform";
 import {Dialog} from '@headlessui/react'
+import useSWR from "swr";
 
-const jobs = [{
-    name: 'Simple Job',
-    locationAddress: '1800 street address',
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-},]
+const useJobData = () => {
+    const {data, isLoading, error} = useSWR('https://jsonplaceholder.typicode.com/todos/1',fetcher)
+    let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
+
+    if (error) return <div>Failed to load</div>;
+    if (!data) return <div>Loading...</div>;
+
+    const jobsTable = <>
+        {
+            <tr key={data.id}>
+                <td
+                    className={classNames( 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {data.title}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {data.complete}
+                </td>
+
+                <td
+                    className={classNames(data.id !== data.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
+                >
+                    <button onClick={() => setIsSchedulerOpen(true)} className="text-indigo-600 hover:text-indigo-900">
+                        Schedule<span className="sr-only">, {data.name}</span>
+                    </button>
+                    <Dialog open={isSchedulerOpen} onClose={() => setIsSchedulerOpen(false)} type="button" className="relative z-50">
+                        <Dialog.Panel>
+                            <JobWeatherList/>
+                            <button onClick={() => setIsSchedulerOpen(false)}>Cancel</button>
+                        </Dialog.Panel>
+                    </Dialog>
+                </td>
+            </tr>
+        }
+    </>
+    return { jobsList: jobsTable, isLoading, error}
+}
 
 export default function JobWeatherList() {
     let [isOpen, setIsOpen] = useState(false)
+    const { job,isLoading,error } = useJobData()
 
     return (<>
         <div className="px-4 sm:px-6 lg:px-8">
@@ -87,40 +125,7 @@ export default function JobWeatherList() {
                             </tr>
                             </thead>
                             <tbody>
-                            {jobs.map((job, jobIdx) => (<tr key={job.locationAddress}>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
-                                >
-                                    {job.name}
-                                </td>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
-                                >
-                                    {job.locationAddress}
-                                </td>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 sm:table-cell')}
-                                >
-                                    {job.locationCity}
-                                </td>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap hidden px-3 py-4 text-sm text-gray-500 lg:table-cell')}
-                                >
-                                    {job.locationState}
-                                </td>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}
-                                >
-                                    {job.locationZipCode}
-                                </td>
-                                <td
-                                    className={classNames(jobIdx !== jobs.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
-                                >
-                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                        Schedule<span className="sr-only">, {job.name}</span>
-                                    </a>
-                                </td>
-                            </tr>))}
+                            {job ? job : isLoading}
                             </tbody>
                         </table>
                     </div>
