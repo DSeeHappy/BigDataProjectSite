@@ -1,5 +1,9 @@
+'use client'
 import JobForm from "@/app/components/jobform";
 import JobList from "@/app/components/joblist";
+import useSWR from "swr";
+import {useState} from "react";
+
 
 export default function Home() {
     return (
