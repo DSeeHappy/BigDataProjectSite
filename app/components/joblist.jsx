@@ -111,7 +111,6 @@ export function JobNotScheduledListItem({job}){
                     </Link>
 
                 </td>
-
             </tr>
         </>
     )
