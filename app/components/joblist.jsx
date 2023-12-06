@@ -11,48 +11,118 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 
 const useJobsListData = () => {
-    const {data, isLoading, error} = useSWR('https://jsonplaceholder.typicode.com/todos/',fetcher)
+    const {data, isLoading, error} = useSWR('http://localhost:8080/jobs',fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
 
-    const jobsTable = <>
-    {
-        data.map((job) => (<tr key={job.id}>
-            <td
-                className={classNames( 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
-            >
-                {job.title}
-            </td>
-            <td
-                className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
-            >
-                {job.complete}
-            </td>
 
-            <td
-                className={classNames(job.id !== job.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
-            >
-                <button onClick={() => setIsSchedulerOpen(true)} className="text-indigo-600 hover:text-indigo-900">
-                    Schedule<span className="sr-only">, {job.name}</span>
-                </button>
-                <Dialog open={isSchedulerOpen} onClose={() => setIsSchedulerOpen(false)} type="button" className="relative z-50">
+    const jobList = data.map((job) => (
+        <>
+            {job.scheduled === "true"
+            ? <JobScheduledListItem key={job.id} job={job} />
+            : <JobNotScheduledListItem key={job.id} job={job}/>
+            }
+        </>
+    ));
+
+    return { jobsList: jobList, isLoading, error}
+}
+
+export function JobScheduledListItem({job}){
+    return(<>
+            <tr key={job.id}>
+                <td
+                    className={classNames( 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.name}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.address}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.city}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.state}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.zip_code}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.schedule_date}
+                </td>
+
+
+            </tr>
+        </>
+    )
+}
+
+export function JobNotScheduledListItem({job}){
+    let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
+
+    return(<>
+            <tr key={job.id}>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.name}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.address}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.city}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.state}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {job.zip_code}
+                </td>
+                <td
+                    className={classNames(job.id !== job.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
+                >
+                    <button onClick={() => setIsSchedulerOpen(true)} className="text-indigo-600 hover:text-indigo-900">
+                        Schedule<span className="sr-only">, {job.name}</span>
+                    </button>
+                    <Dialog open={isSchedulerOpen} onClose={() => setIsSchedulerOpen(false)} type="button"
+                            className="relative z-50">
                         <Dialog.Panel>
                             <JobWeatherList/>
                             <button onClick={() => setIsSchedulerOpen(false)}>Cancel</button>
                         </Dialog.Panel>
-                </Dialog>
-            </td>
-        </tr>))
-    }
-    </>
-    return { jobsList: jobsTable, isLoading, error}
+                    </Dialog>
+                </td>
+
+            </tr>
+        </>
+    )
 }
 
 export default function JobList() {
     let [isOpen, setIsOpen] = useState(false)
-    const { jobsList,isLoading,error } = useJobsListData()
+    const {jobsList, isLoading, error} = useJobsListData()
 
     return (<>
         <div className="px-4 sm:px-6 lg:px-8">

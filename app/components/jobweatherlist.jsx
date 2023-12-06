@@ -8,7 +8,8 @@ import useSWR from "swr";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const useJobData = () => {
-    const {data, isLoading, error} = useSWR('https://jsonplaceholder.typicode.com/todos/1',fetcher)
+    // const {data, isLoading, error} = useSWR('https://jsonplaceholder.typicode.com/todos/1',fetcher)
+    const {data, isLoading, error} = useSWR('http://localhost:8080/jobs',fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
