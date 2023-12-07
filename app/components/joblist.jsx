@@ -12,7 +12,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 
 const useJobsListData = () => {
-    const {data, isLoading, error} = useSWR('http://localhost:8080/jobs',fetcher)
+    const {data, isLoading, error} = useSWR(process.env.SERVER_URL + '/jobs',fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
