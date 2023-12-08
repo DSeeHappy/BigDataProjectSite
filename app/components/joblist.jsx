@@ -1,9 +1,6 @@
 'use client'
 import classNames from "@/app/components/classnames";
 import {useState} from "react";
-import JobForm from "@/app/components/jobform";
-import {Dialog} from '@headlessui/react'
-import JobWeatherList from "@/app/components/jobweatherlist";
 import useSWR from 'swr'
 import Link from "next/link";
 
@@ -12,7 +9,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 
 const useJobsListData = () => {
-    const {data, isLoading, error} = useSWR(process.env.SERVER_URL + '/jobs',fetcher)
+    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + '/jobs',fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;

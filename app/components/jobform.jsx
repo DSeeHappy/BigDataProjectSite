@@ -1,6 +1,19 @@
+'use client'
 import * as React from "react"
+import {AddressAutofill} from "@mapbox/search-js-react";
+import { useRouter } from "next/navigation";
+import {useState} from "react";
+
 
 export default function JobForm() {
+
+    const router = useRouter();
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault()
+        router.push('/')
+    }
     return (
         <div className="relative isolate bg-white">
             <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
@@ -15,92 +28,122 @@ export default function JobForm() {
                         </p>
                     </div>
                 </div>
-                <form action="#" method="POST" className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
-                    <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                        <div className="sm:col-span-2">
-                            <label htmlFor="name" className="block text-sm font-semibold leading-6 text-gray-900">
-                                Job Name
-                            </label>
-                            <div className="mt-2.5">
-                                <input
-                                    name="name"
-                                    id="name"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sm:col-span-2">
-                        <label htmlFor="address" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Address
-                        </label>
-                        <div className="mt-2.5">
-                            <input
-                                name="address"
-                                id="address"
-                                type="text"
-                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
+                <form action={process.env.NEXT_PUBLIC_SERVER_URL + "/jobs"} method="POST" onSubmit={handleSubmit} className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
                         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                             <div className="sm:col-span-2">
-                                <label htmlFor="city" className="block text-sm font-semibold leading-6 text-gray-900">
-                                    City
+                                <label htmlFor="name" className="block text-sm font-semibold leading-6 text-gray-900">
+                                    Job Name
                                 </label>
                                 <div className="mt-2.5">
                                     <input
-                                        name="city"
+                                        name="name"
+                                        id="name"
                                         type="text"
-                                        id="city"
+                                        autoComplete="off"
                                         className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
                             </div>
+                        </div>
+                        <div className="sm:col-span-2">
+                            <label htmlFor="address" className="block text-sm font-semibold leading-6 text-gray-900">
+                                Address
+                            </label>
+                            <div className="mt-2.5">
+                                <AddressAutofill accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}>
+
+                                    <input
+                                        name="address"
+                                        id="address"
+                                        type="text"
+                                        autoComplete="street-address"
+                                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                </AddressAutofill>
+                            </div>
+                        </div>
+                        <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
                             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                                 <div className="sm:col-span-2">
-                                    <label htmlFor="state"
+                                    <label htmlFor="city"
                                            className="block text-sm font-semibold leading-6 text-gray-900">
-                                        State
+                                        City
                                     </label>
                                     <div className="mt-2.5">
+
                                         <input
-                                            name="state"
+                                            name="city"
                                             type="text"
-                                            id="state"
+                                            id="city"
+                                            autoComplete="address-level2"
                                             className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="zipCode"
-                                           className="block text-sm font-semibold leading-6 text-gray-900">
-                                        Zip Code
-                                    </label>
-                                    <div className="mt-2.5">
-                                        <input
-                                            name="zipCode"
-                                            type="text"
-                                            id="zipCode"
-                                            className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        />
+                                <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                                    <div className="sm:col-span-2">
+                                        <label htmlFor="state"
+                                               className="block text-sm font-semibold leading-6 text-gray-900">
+                                            State
+                                        </label>
+                                        <div className="mt-2.5">
+
+                                            <input
+                                                name="state"
+                                                type="text"
+                                                id="state"
+                                                autoComplete="address-level1"
+                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                                    <div className="sm:col-span-2">
+                                        <label htmlFor="zipCode"
+                                               className="block text-sm font-semibold leading-6 text-gray-900">
+                                            Zip Code
+                                        </label>
+                                        <div className="mt-2.5">
+
+                                            <input
+                                                name="zipCode"
+                                                type="text"
+                                                id="zipCode"
+                                                autoComplete="postal-code"
+                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                                <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                                    <div className="sm:col-span-2">
+                                        <label htmlFor="country"
+                                               className="block text-sm font-semibold leading-6 text-gray-900">
+                                            Country
+                                        </label>
+                                        <div className="mt-2.5">
+
+                                            <input
+                                                name="country"
+                                                type="text"
+                                                id="country"
+                                                autoComplete="country"
+                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            />
+                                        </div>
+                                    </div>
+                            </div>
+                            <div className="mt-8 flex justify-end">
+                                <button
+                                    type="submit"
+                                    className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    Create Job
+                                </button>
+                            </div>
                         </div>
-                        <div className="mt-8 flex justify-end">
-                            <button
-                                type="submit"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                Create Job
-                            </button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
