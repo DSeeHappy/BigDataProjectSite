@@ -8,7 +8,6 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const useWeatherData = (id) => {
     const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + "/weather/"+id, fetcher)
-    let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;

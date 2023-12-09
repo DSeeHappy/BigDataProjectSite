@@ -31,7 +31,7 @@ export default function JobForm() {
         console.log(result.latitude)
         console.log(result.longitude)
 
-        const weather = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/weather", {
+        await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/weather", {
             body: JSON.stringify({
                 job_id: result.id,
                 lat: result.latitude,
@@ -41,7 +41,7 @@ export default function JobForm() {
                 'Content-Type': 'application/json'
             },
             method: 'POST'
-        })
+        });
 
         router.push('/')
     }
