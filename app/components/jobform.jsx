@@ -2,7 +2,6 @@
 import * as React from "react"
 import {AddressAutofill} from "@mapbox/search-js-react";
 import { useRouter } from "next/navigation";
-import {useState} from "react";
 
 
 export default function JobForm() {
@@ -27,6 +26,20 @@ export default function JobForm() {
             method: 'POST'
         })
         const result = await res.json()
+
+        const weather = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/weather", {
+            body: JSON.stringify({
+                job_id: result.id,
+                lat: result.lat,
+                lon: result.lon,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST'
+        })
+        const weatherResult = await weather.json()
+        console.log(weatherResult)
         router.push('/')
     }
     return (

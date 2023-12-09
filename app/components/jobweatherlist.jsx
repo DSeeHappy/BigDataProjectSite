@@ -4,52 +4,63 @@ import {useState} from "react";
 import JobForm from "@/app/components/jobform";
 import {Dialog} from '@headlessui/react'
 import useSWR from "swr";
+import Link from "next/link";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const useJobData = () => {
-    const {data, isLoading, error} = useSWR(process.env.SERVER_URL + '/jobs',fetcher)
+const useWeatherData = (id) => {
+    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + "/weather/"+"f2edfd80-9642-11ee-9a63-67de49319746", fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
 
-    const jobsTable = <>
-        {
-            <tr key={data.id}>
+
+    const weatherTable = data.weather.map((weather) => (
+        <>
+            <tr key={weather.id}>
                 <td
                     className={classNames( 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
                 >
-                    {data.title}
+                    {weather.main}
                 </td>
                 <td
                     className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
                 >
-                    {data.complete}
+                    {weather.description}
                 </td>
-
                 <td
-                    className={classNames(data.id !== data.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
+                    className={classNames( 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
                 >
-                    <button onClick={() => setIsSchedulerOpen(true)} className="text-indigo-600 hover:text-indigo-900">
-                        Schedule<span className="sr-only">, {data.name}</span>
-                    </button>
-                    <Dialog open={isSchedulerOpen} onClose={() => setIsSchedulerOpen(false)} type="button" className="relative z-50">
-                        <Dialog.Panel>
-                            <JobWeatherList/>
-                            <button onClick={() => setIsSchedulerOpen(false)}>Cancel</button>
-                        </Dialog.Panel>
-                    </Dialog>
+                    {weather.deg}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {weather.rain}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {weather.snow}
+                </td>
+                <td
+                    className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
+                >
+                    {weather.pressure}
                 </td>
             </tr>
-        }
-    </>
-    return { jobsList: jobsTable, isLoading, error}
+        </>
+    ));
+
+    return { weatherList: weatherTable, isLoading, error}
 }
 
-export default function JobWeatherList() {
+
+
+export default function JobWeatherList(id) {
     let [isOpen, setIsOpen] = useState(false)
-    const { job,isLoading,error } = useJobData()
+    const {  weatherList,isLoading,error } = useWeatherData(id)
 
     return (<>
         <div className="px-4 sm:px-6 lg:px-8">
@@ -90,42 +101,42 @@ export default function JobWeatherList() {
                                     scope="col"
                                     className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
                                 >
-                                    Name
+                                    main
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell"
                                 >
-                                    Address
+                                    description
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell"
                                 >
-                                    City
+                                    degrees
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell"
                                 >
-                                    State
+                                    rain
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
                                 >
-                                    Zip Code
+                                    snow
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
                                 >
-                                    Scheduled
+                                    pressure
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            {job ? job : isLoading}
+                            {weatherList ? weatherList : isLoading}
                             </tbody>
                         </table>
                     </div>

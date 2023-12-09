@@ -1,11 +1,12 @@
 'use client'
 import * as React from "react"
 import useSWR from "swr";
+import JobWeatherList from "@/app/components/jobweatherlist";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Page({id}) {
-    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + `/jobs/${id}`,fetcher)
+    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + '/jobs/'+"f2edfd80-9642-11ee-9a63-67de49319746",fetcher)
     // const {weatherData, isWeatherLoading, weatherError} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + `/weather/${id}`,fetcher)
     if (error) return <div>Failed to load</div>
     if (!data || isLoading) return <div>Loading...</div>
@@ -24,7 +25,7 @@ export default function Page({id}) {
                         </p>
                     </div>
                 </div>
-                <form action="http://localhost:8080/jobs" method="POST" className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
+                <form action={process.env.NEXT_PUBLIC_SERVER_URL + "/jobs"} method="POST" className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                         <div className="sm:col-span-2">
                             <label htmlFor={data.name} className="block text-sm font-semibold leading-6 text-gray-900">
@@ -113,6 +114,7 @@ export default function Page({id}) {
                     </div>
                 </form>
             </div>
+            <JobWeatherList id={id}/>
         </div>
     )
 }
