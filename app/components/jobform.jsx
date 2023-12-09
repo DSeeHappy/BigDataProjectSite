@@ -9,9 +9,24 @@ export default function JobForm() {
 
     const router = useRouter();
 
-    const handleSubmit = (e) => {
-
-        e.preventDefault()
+    async function handleSubmit (event) {
+        event.preventDefault()
+        const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/jobs", {
+            body: JSON.stringify({
+                name: event.target.name.value,
+                address: event.target.address.value,
+                city: event.target.city.value,
+                state: event.target.state.value,
+                zip_code: event.target.zip_code.value,
+                country: event.target.country.value,
+                company_id: "1"
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST'
+        })
+        const result = await res.json()
         router.push('/')
     }
     return (
@@ -24,7 +39,9 @@ export default function JobForm() {
                         </div>
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900">Create New Job</h2>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Create a job, this system will provide you the weather to then schedule the job
+                            Create a job, this system will provide you the weather to then schedule the job.
+                            <br/>
+                            Make sure to input an address which includes ful city state, zip code and country. Otherwise you will not be able to continue creating the job.
                         </p>
                     </div>
                 </div>
@@ -64,6 +81,8 @@ export default function JobForm() {
                         </div>
                         <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
                             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+
+
                                 <div className="sm:col-span-2">
                                     <label htmlFor="city"
                                            className="block text-sm font-semibold leading-6 text-gray-900">
@@ -100,16 +119,16 @@ export default function JobForm() {
                                 </div>
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                                     <div className="sm:col-span-2">
-                                        <label htmlFor="zipCode"
+                                        <label htmlFor="zip_code"
                                                className="block text-sm font-semibold leading-6 text-gray-900">
                                             Zip Code
                                         </label>
                                         <div className="mt-2.5">
 
                                             <input
-                                                name="zipCode"
+                                                name="zip_code"
                                                 type="text"
-                                                id="zipCode"
+                                                id="zip_code"
                                                 autoComplete="postal-code"
                                                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             />
@@ -117,23 +136,23 @@ export default function JobForm() {
                                     </div>
                                 </div>
                             </div>
-                                <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="country"
-                                               className="block text-sm font-semibold leading-6 text-gray-900">
-                                            Country
-                                        </label>
-                                        <div className="mt-2.5">
+                            <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                                <div className="sm:col-span-2">
+                                    <label htmlFor="country"
+                                           className="block text-sm font-semibold leading-6 text-gray-900">
+                                        Country
+                                    </label>
+                                    <div className="mt-2.5">
 
-                                            <input
-                                                name="country"
-                                                type="text"
-                                                id="country"
-                                                autoComplete="country"
-                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            />
-                                        </div>
+                                        <input
+                                            name="country"
+                                            type="text"
+                                            id="country"
+                                            autoComplete="country"
+                                            className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        />
                                     </div>
+                                </div>
                             </div>
                             <div className="mt-8 flex justify-end">
                                 <button

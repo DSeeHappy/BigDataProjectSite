@@ -5,8 +5,8 @@ import useSWR from "swr";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Page({id}) {
-    const {data, isLoading, error} = useSWR(`http://localhost:8080/jobs/${id}`,fetcher)
-    // const {weatherData, isWeatherLoading, weatherError} = useSWR(`http://localhost:8080/weather/${id}`,fetcher)
+    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + `/jobs/${id}`,fetcher)
+    // const {weatherData, isWeatherLoading, weatherError} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + `/weather/${id}`,fetcher)
     if (error) return <div>Failed to load</div>
     if (!data || isLoading) return <div>Loading...</div>
 
