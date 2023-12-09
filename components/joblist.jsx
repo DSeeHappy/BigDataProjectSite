@@ -1,5 +1,5 @@
 'use client'
-import classNames from "@/app/components/classnames";
+import classNames from "@/components/classnames";
 import useSWR from 'swr'
 import Link from "next/link";
 import {useRouter} from "next/navigation";

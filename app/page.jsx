@@ -1,5 +1,5 @@
 'use client'
-import JobList from "@/app/components/joblist";
+import JobList from "@/components/joblist";
 
 
 export default function Home() {
