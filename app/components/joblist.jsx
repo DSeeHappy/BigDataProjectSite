@@ -11,7 +11,6 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const useJobsListData = () => {
     const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + '/jobs',fetcher)
-    let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
@@ -137,7 +136,6 @@ const deleteJob = async (id) => {
 }
 
 export default function JobList() {
-    let [isOpen, setIsOpen] = useState(false)
     const {jobsList, isLoading, error} = useJobsListData()
 
     return (<>
