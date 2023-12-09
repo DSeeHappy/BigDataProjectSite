@@ -9,11 +9,13 @@ import Link from "next/link";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const useWeatherData = (id) => {
-    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + "/weather/"+"f2edfd80-9642-11ee-9a63-67de49319746", fetcher)
+    const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + "/weather/"+id, fetcher)
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
+
+    if (data.weather === undefined) return <div>Loading...</div>;
 
 
     const weatherTable = data.weather.map((weather) => (
@@ -58,7 +60,7 @@ const useWeatherData = (id) => {
 
 
 
-export default function JobWeatherList(id) {
+export default function JobWeatherList({id}) {
     let [isOpen, setIsOpen] = useState(false)
     const {  weatherList,isLoading,error } = useWeatherData(id)
 

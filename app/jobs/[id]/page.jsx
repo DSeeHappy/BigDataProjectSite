@@ -5,7 +5,7 @@ import JobWeatherList from "@/app/components/jobweatherlist";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function Page({id}) {
+export default function Page({params}) {
     const {data, isLoading, error} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + '/jobs/'+"f2edfd80-9642-11ee-9a63-67de49319746",fetcher)
     // const {weatherData, isWeatherLoading, weatherError} = useSWR(process.env.NEXT_PUBLIC_SERVER_URL + `/weather/${id}`,fetcher)
     if (error) return <div>Failed to load</div>
@@ -114,7 +114,7 @@ export default function Page({id}) {
                     </div>
                 </form>
             </div>
-            <JobWeatherList id={id}/>
+            <JobWeatherList id={params.id}/>
         </div>
     )
 }
