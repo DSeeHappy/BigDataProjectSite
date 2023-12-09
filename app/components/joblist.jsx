@@ -3,6 +3,7 @@ import classNames from "@/app/components/classnames";
 import {useState} from "react";
 import useSWR from 'swr'
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -14,6 +15,8 @@ const useJobsListData = () => {
 
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
+
+    if (data === undefined) return <div>Loading...</div>;
 
 
     const jobList = data.map((job) => (
@@ -70,6 +73,7 @@ export function JobScheduledListItem({job}){
 
 export function JobNotScheduledListItem({job}){
     let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
+    const router = useRouter();
 
     return(<>
             <tr key={job.id}>
@@ -108,9 +112,32 @@ export function JobNotScheduledListItem({job}){
                     </Link>
 
                 </td>
+                <td
+                    className={classNames(job.id !== job.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-8 lg:pr-8')}
+                >
+                        <button onClick={() =>{ deleteJob(job.id).then(r =>  console.log("Deleted")
+                        ).then(r => router.refresh()
+                        )}} className="text-indigo-600 hover:text-indigo-900">
+                            Delete<span className="sr-only">, {job.name}</span>
+                        </button>
+
+                </td>
             </tr>
         </>
     )
+}
+
+const deleteJob = async (id) => {
+
+    console.log(id)
+    await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/jobs/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+
 }
 
 export default function JobList() {
@@ -180,6 +207,12 @@ export default function JobList() {
                                     className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
                                 >
                                     Scheduled
+                                </th>
+                                <th
+                                    scope="col"
+                                    className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
+                                >
+                                    Delete
                                 </th>
                             </tr>
                             </thead>

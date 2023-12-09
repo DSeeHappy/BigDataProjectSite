@@ -71,6 +71,7 @@ const formattedDate = (input) => {
 
 
 export default function JobWeatherList({id}) {
+
     let [isOpen, setIsOpen] = useState(false)
     const {  weatherList,isLoading,error } = useWeatherData(id)
 
