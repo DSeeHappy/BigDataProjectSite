@@ -18,7 +18,7 @@ const useJobsListData = () => {
 
     const jobList = data.map((job) => (
         <>
-            {job.scheduled === "true"
+            {job.scheduled === true
             ? <JobScheduledListItem key={job.id} job={job} />
             : <JobNotScheduledListItem key={job.id} job={job}/>
             }
@@ -59,7 +59,7 @@ export function JobScheduledListItem({job}){
                 <td
                     className={classNames('whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}
                 >
-                    {job.schedule_date}
+                    {job.scheduled_date}
                 </td>
 
 
