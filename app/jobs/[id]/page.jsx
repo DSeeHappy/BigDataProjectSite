@@ -1,7 +1,7 @@
 'use client'
 import * as React from "react"
 import useSWR from "swr";
-import JobWeatherList from "@/app/jobs/[id]/jobweatherlist";
+import JobWeatherList from "@/app/components/jobweatherlist";
 import {useRouter} from "next/navigation";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
