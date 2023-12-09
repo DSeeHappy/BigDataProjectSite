@@ -65,7 +65,7 @@ const useWeatherData = (id) => {
 const formattedDate = (input) => {
     const t = new Date(0)
     t.setUTCSeconds(input)
-    return moment(t).format('MMMM Do YYYY')
+    return moment(t).format('MM/DD/YYYY')
 }
 
 

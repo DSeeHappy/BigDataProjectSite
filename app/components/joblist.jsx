@@ -16,9 +16,6 @@ const useJobsListData = () => {
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
 
-    if (data === undefined) return <div>Loading...</div>;
-
-
     const jobList = data.map((job) => (
         <>
             {job.scheduled === true
@@ -72,7 +69,6 @@ export function JobScheduledListItem({job}){
 }
 
 export function JobNotScheduledListItem({job}){
-    let [isSchedulerOpen, setIsSchedulerOpen] = useState(false)
     const router = useRouter();
 
     return(<>

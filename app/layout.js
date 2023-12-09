@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
       <div className="md:flex md:items-center md:justify-between center">
         <div className="min-w-0 flex-1">
           <Link href={"/"}>
-
           <h2 className="text-2xl font-bold leading-7 text-blue-500 sm:truncate sm:text-3xl sm:tracking-tight text-center">
             Big Data Final Project
           </h2>
