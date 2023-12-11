@@ -14,6 +14,8 @@ const useJobsListData = () => {
     if (error) return <div>Failed to load</div>;
     if (!data) return <div>Loading...</div>;
 
+    if (data.map === undefined) return <div>Loading... Server might not be deployed?</div>
+
     const jobList = data.map((job) => (
         <>
             {job.scheduled === true
